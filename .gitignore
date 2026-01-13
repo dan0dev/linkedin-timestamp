@@ -6,6 +6,9 @@ dist/
 tmpclaude-*
 .claude/
 
+# Personal notes
+description.txt
+
 # Node modules (if any)
 node_modules/
 
