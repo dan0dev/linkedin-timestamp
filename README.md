@@ -12,7 +12,7 @@ Transform LinkedIn's vague "2h ago" into precise timestamps like **"01/13/2026, 
 
 *Because "3 days ago" doesn't cut it when you need the facts.*
 
-[Installation](#-quick-start) • [Features](#-features) • [How It Works](#-how-it-works) • [Examples](#-real-world-examples)
+[Installation](#-quick-start) • [Features](#-features) • [How It Works](#-how-it-works) • [Use Cases](#-use-cases)
 
 </div>
 
@@ -163,22 +163,34 @@ Automatically detects your browser language and formats dates accordingly:
 
 ---
 
-## 🎪 Real-World Examples
+## 🎯 Use Cases
 
-### 1. **Journalism & Fact-Checking**
-> "A CEO claimed they addressed the issue 'immediately' after a scandal. LinkedIn showed their response as '2d ago.' Our extension revealed it was posted 3 days after—not so immediate!"
+### Who Benefits?
 
-### 2. **Job Hunting**
-> "Wanted to know if a job posting was fresh or recycled. '1w ago' revealed it was 9 days old—still worth applying!"
+**Journalists & Fact-Checkers**
+- Verify exact timing of statements and responses
+- Document precise timelines for news stories
+- Confirm claims about "immediate" reactions
 
-### 3. **Competitive Intelligence**
-> "Tracking when competitors announce product launches. Exact timestamps show their release cadence and market timing strategies."
+**Job Seekers**
+- Determine if job postings are fresh or old
+- Track when companies are actively hiring
+- Prioritize recent opportunities
 
-### 4. **Research & Analysis**
-> "Studying engagement patterns. Discovered most meaningful discussions happen within the first 2 hours, not 'same day' as I thought."
+**Business & Market Research**
+- Monitor competitor announcement timing
+- Analyze posting patterns and engagement windows
+- Track industry trends with precise timestamps
 
-### 5. **Legal & Compliance**
-> "Needed exact timestamps for compliance documentation. Screenshot with precise time beats 'posted recently.'"
+**Academic Researchers**
+- Collect accurate data for social media studies
+- Analyze engagement timing patterns
+- Document sources with exact timestamps
+
+**Legal & Compliance Teams**
+- Capture exact timestamps for documentation
+- Create timestamped evidence for records
+- Meet compliance requirements for social media monitoring
 
 ---
 
