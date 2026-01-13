@@ -14,6 +14,6 @@
     "timestamp",
     "date-extractor"
   ],
-  "author": "Your Name",
-  "license": "MIT"
+  "author": "Daniel Kakuk <hi@danielkakuk.com>",
+  "license": "GPL-3.0"
 }

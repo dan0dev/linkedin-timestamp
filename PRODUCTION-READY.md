@@ -55,7 +55,7 @@ linkedin-timestamp/
 ├── manifest.json                   # Extension manifest
 ├── package.json                    # Build configuration
 ├── README.md                       # User documentation
-├── LICENSE                         # MIT License
+├── LICENSE                         # GPL-3.0 License
 ├── PRIVACY.md                      # Privacy policy (for store)
 ├── STORE-LISTING.md                # Store listing content
 └── linkedin-post-date-extractor-v1.0.0.zip   # 📦 READY TO UPLOAD
