@@ -300,19 +300,8 @@ function formatDate(date) {
 ## 🎨 Screenshots
 
 ### Popup Interface
-```
-┌─────────────────────────────────────┐
-│  LinkedIn Post Date Extractor       │
-│                                     │
-│  LinkedIn post URL:                 │
-│  [https://linkedin.com/posts/...]   │
-│                                     │
-│  [Get uploaded date] [Clear URL]    │
-│                                     │
-│  Uploaded on: 01/13/2026, 1:29 PM   │
-│  UTC: Mon, 13 Jan 2026 13:29:45 GMT │
-└─────────────────────────────────────┘
-```
+
+![Extension Popup Interface](https://i.imgur.com/QmZIgng.png)
 
 ### LinkedIn Feed (Before)
 ```
