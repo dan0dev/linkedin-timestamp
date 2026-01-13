@@ -140,8 +140,9 @@ Please prepare the following screenshots (1280x800 or 640x400):
 
 ## Support Contact
 
-GitHub Repository: [Your Repository URL]
-Issues/Questions: [Your GitHub Issues URL]
+GitHub Repository: https://github.com/dan0dev/linkedin-timestamp
+Issues/Questions: https://github.com/dan0dev/linkedin-timestamp/issues
+Email: hi@danielkakuk.com
 
 ---
 
