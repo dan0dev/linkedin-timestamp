@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LinkedIn Post Date Extractor</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container" role="main">
+    <h2 id="main-heading">LinkedIn Post Date Extractor</h2>
+    <form class="form" role="form" aria-labelledby="main-heading">
+      <label for="url">LinkedIn post URL:</label>
+      <input
+        type="url"
+        id="url"
+        name="url"
+        placeholder="https://www.linkedin.com/posts/..."
+        aria-label="LinkedIn post URL input"
+        aria-describedby="url-hint"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <p id="url-hint" class="hint">Paste any LinkedIn post or comment URL</p>
+      <div class="button-group">
+        <button
+          id="getDateBtn"
+          type="button"
+          aria-label="Extract timestamp from LinkedIn URL"
+        >
+          Get uploaded date
+        </button>
+        <button
+          id="clearBtn"
+          type="button"
+          aria-label="Clear the URL input field"
+        >
+          Clear URL
+        </button>
+      </div>
+    </form>
+    <div class="output" role="region" aria-live="polite" aria-label="Extraction results">
+      <div class="result-line">
+        <span class="label">Uploaded on: </span>
+        <span id="localtime" aria-label="Local timestamp"></span>
+      </div>
+      <div class="result-line">
+        <span class="label">UTC: </span>
+        <span id="date" aria-label="UTC timestamp"></span>
+      </div>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

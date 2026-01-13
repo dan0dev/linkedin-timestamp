@@ -1,0 +1,14 @@
+# Build artifacts
+dist/
+*.zip
+
+# Temporary files
+tmpclaude-*
+.claude/
+
+# Node modules (if any)
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db

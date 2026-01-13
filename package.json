@@ -1,0 +1,19 @@
+{
+  "name": "linkedin-post-date-extractor",
+  "version": "1.0.0",
+  "description": "Chrome extension to extract exact timestamps from LinkedIn posts",
+  "scripts": {
+    "build": "bash build.sh",
+    "build:win": "build.bat",
+    "clean": "rm -rf dist",
+    "watch": "echo 'Watching for changes...' && npm run build"
+  },
+  "keywords": [
+    "linkedin",
+    "chrome-extension",
+    "timestamp",
+    "date-extractor"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

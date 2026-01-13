@@ -1,0 +1,171 @@
+:root {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --text-secondary: #666666;
+  --border-color: #e0e0e0;
+  --input-bg: #ffffff;
+  --input-border: #ccc;
+  --primary-color: #0a66c2;
+  --primary-hover: #004182;
+  --button-secondary-bg: #e0e0e0;
+  --button-secondary-text: #333;
+  --button-secondary-hover: #d0d0d0;
+  --result-color: #0a66c2;
+  --error-color: #d32f2f;
+  --success-color: #2e7d32;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #1b1f23;
+    --text-color: #e1e4e8;
+    --text-secondary: #8b949e;
+    --border-color: #30363d;
+    --input-bg: #0d1117;
+    --input-border: #30363d;
+    --primary-color: #58a6ff;
+    --primary-hover: #388bfd;
+    --button-secondary-bg: #21262d;
+    --button-secondary-text: #c9d1d9;
+    --button-secondary-hover: #30363d;
+    --result-color: #58a6ff;
+    --error-color: #f85149;
+    --success-color: #3fb950;
+  }
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica", Arial, sans-serif;
+  font-size: 14px;
+  width: 400px;
+  min-height: 250px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.container {
+  margin: 1em;
+}
+
+h2 {
+  font-size: 18px;
+  margin-top: 0;
+  margin-bottom: 1em;
+  color: var(--primary-color);
+}
+
+.form {
+  margin-bottom: 1.5em;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 0.75em;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(10, 102, 194, 0.1);
+}
+
+.button-group {
+  display: flex;
+  gap: 0.5em;
+}
+
+button {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+button:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#getDateBtn {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+#getDateBtn:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+}
+
+#clearBtn {
+  background-color: var(--button-secondary-bg);
+  color: var(--button-secondary-text);
+}
+
+#clearBtn:hover:not(:disabled) {
+  background-color: var(--button-secondary-hover);
+}
+
+.output {
+  border-top: 1px solid var(--border-color);
+  padding-top: 1em;
+}
+
+.result-line {
+  margin-bottom: 0.75em;
+}
+
+.label {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+#localtime, #date {
+  color: var(--result-color);
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.error-message {
+  color: var(--error-color);
+  font-weight: 500;
+  padding: 8px;
+  background-color: rgba(211, 47, 47, 0.1);
+  border-radius: 4px;
+  margin-top: 0.5em;
+}
+
+.success-message {
+  color: var(--success-color);
+  font-weight: 500;
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 0.5em;
+  font-style: italic;
+}
