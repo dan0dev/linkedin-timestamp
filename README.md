@@ -10,11 +10,11 @@ Transform LinkedIn's vague "2h ago" into precise timestamps like **"01/13/2026, 
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-green?style=for-the-badge)](https://developer.chrome.com/docs/extensions/mv3/)
 [![Privacy First](https://img.shields.io/badge/Privacy-First-orange?style=for-the-badge&logo=shield)](https://github.com/dan0dev/linkedin-timestamp)
 
-*Because "3 days ago" doesn't cut it when you need the facts.*
+_Because "3 days ago" doesn't cut it when you need the facts._
 
 [Installation](#-quick-start) • [Features](#-features) • [How It Works](#-how-it-works) • [Use Cases](#-use-cases)
 
-![LinkedIn Post Date Extractor Demo](https://i.imgur.com/pmbHKlc.jpeg)
+<video src="https://i.imgur.com/cSjqmXF.mp4" controls="controls" muted="muted" playsinline="playsinline" style="max-width: 100%;"></video>
 
 </div>
 
@@ -23,6 +23,7 @@ Transform LinkedIn's vague "2h ago" into precise timestamps like **"01/13/2026, 
 ## 🤔 The Problem
 
 LinkedIn shows you:
+
 ```
 "Posted 2h ago"
 "3d ago"
@@ -30,6 +31,7 @@ LinkedIn shows you:
 ```
 
 **But you need to know:**
+
 - Did they post this before or after the news broke?
 - Was this comment immediate or came days later?
 - What's the exact timeline of this conversation?
@@ -44,13 +46,14 @@ This extension automatically decodes LinkedIn's post IDs to reveal **exact times
 
 ### Before → After
 
-| LinkedIn Shows | Extension Reveals |
-|----------------|-------------------|
-| `2h ago` | `01/13/2026, 1:29:45 PM (2 hours ago)` |
-| `3d ago` | `01/10/2026, 9:15:22 AM (3 days ago)` |
-| `1w ago` | `01/06/2026, 4:30:10 PM (1 week ago)` |
+| LinkedIn Shows | Extension Reveals                      |
+| -------------- | -------------------------------------- |
+| `2h ago`       | `01/13/2026, 1:29:45 PM (2 hours ago)` |
+| `3d ago`       | `01/10/2026, 9:15:22 AM (3 days ago)`  |
+| `1w ago`       | `01/06/2026, 4:30:10 PM (1 week ago)`  |
 
 **Plus:** See time differences in comment threads!
+
 ```
 Post: 01/13/2026, 8:00:00 AM (5 hours ago)
 ├─ Comment: 01/13/2026, 8:05:00 AM [5 minutes after post] ← Quick!
@@ -64,11 +67,13 @@ Post: 01/13/2026, 8:00:00 AM (5 hours ago)
 ### Installation (2 minutes)
 
 1. **Download** this repository or clone it:
+
    ```bash
    git clone https://github.com/dan0dev/linkedin-timestamp.git
    ```
 
 2. **Build** the extension:
+
    ```bash
    cd linkedin-timestamp
    ./build.sh         # Mac/Linux
@@ -77,6 +82,7 @@ Post: 01/13/2026, 8:00:00 AM (5 hours ago)
    ```
 
 3. **Load** in Chrome:
+
    - Open `chrome://extensions/`
    - Enable **Developer mode** (top-right toggle)
    - Click **Load unpacked**
@@ -92,6 +98,7 @@ Post: 01/13/2026, 8:00:00 AM (5 hours ago)
 ## 🎯 Features
 
 ### ⚡ Automatic Mode
+
 **Zero effort. Maximum insight.**
 
 - Browse LinkedIn normally
@@ -100,6 +107,7 @@ Post: 01/13/2026, 8:00:00 AM (5 hours ago)
 - Real-time updates as you scroll
 
 ### 🎯 Manual Extractor
+
 **For specific posts.**
 
 - Click the extension icon
@@ -108,6 +116,7 @@ Post: 01/13/2026, 8:00:00 AM (5 hours ago)
 - Shows both local time and UTC
 
 ### 💬 Comment Thread Analysis
+
 **See the conversation flow.**
 
 - Exact timestamp for every comment
@@ -116,6 +125,7 @@ Post: 01/13/2026, 8:00:00 AM (5 hours ago)
 - Track rapid vs. delayed responses
 
 Example:
+
 ```
 Post: January 13, 2026 at 8:00 AM
 ├─ Alice: 8:05 AM [5 minutes after post] ← Immediate
@@ -124,6 +134,7 @@ Post: January 13, 2026 at 8:00 AM
 ```
 
 ### 🌍 Smart Localization
+
 **Speaks your language.**
 
 Automatically detects your browser language and formats dates accordingly:
@@ -137,6 +148,7 @@ Automatically detects your browser language and formats dates accordingly:
 **Works with ALL browser locales!**
 
 ### 🌙 Dark Mode
+
 **Easy on the eyes.**
 
 - Automatically detects system dark mode
@@ -145,6 +157,7 @@ Automatically detects your browser language and formats dates accordingly:
 - Perfect for late-night research
 
 ### ♿ Accessibility First
+
 **For everyone.**
 
 - Full WCAG 2.1 AA compliance
@@ -154,6 +167,7 @@ Automatically detects your browser language and formats dates accordingly:
 - ARIA labels on all elements
 
 ### 🔒 Privacy Guaranteed
+
 **Your data stays yours.**
 
 - ✅ No tracking
@@ -170,26 +184,31 @@ Automatically detects your browser language and formats dates accordingly:
 ### Who Benefits?
 
 **Journalists & Fact-Checkers**
+
 - Verify exact timing of statements and responses
 - Document precise timelines for news stories
 - Confirm claims about "immediate" reactions
 
 **Job Seekers**
+
 - Determine if job postings are fresh or old
 - Track when companies are actively hiring
 - Prioritize recent opportunities
 
 **Business & Market Research**
+
 - Monitor competitor announcement timing
 - Analyze posting patterns and engagement windows
 - Track industry trends with precise timestamps
 
 **Academic Researchers**
+
 - Collect accurate data for social media studies
 - Analyze engagement timing patterns
 - Document sources with exact timestamps
 
 **Legal & Compliance Teams**
+
 - Capture exact timestamps for documentation
 - Create timestamped evidence for records
 - Meet compliance requirements for social media monitoring
@@ -203,11 +222,13 @@ Automatically detects your browser language and formats dates accordingly:
 LinkedIn uses **Snowflake IDs** (like Twitter, Discord, Instagram) to generate unique post identifiers. These 64-bit numbers encode the timestamp directly!
 
 **Example Post ID:**
+
 ```
 7416739544328249344
 ```
 
 **Decoding Process:**
+
 1. Convert to binary
 2. Shift right by 22 bits
 3. Result is Unix timestamp in milliseconds
@@ -226,21 +247,22 @@ const date = new Date(Number(timestampMs));
 
 ## 📊 Comparison
 
-| Feature | LinkedIn Native | This Extension |
-|---------|----------------|----------------|
+| Feature                 | LinkedIn Native     | This Extension              |
+| ----------------------- | ------------------- | --------------------------- |
 | **Timestamp Precision** | Relative ("2h ago") | Exact (01/13/2026, 1:29 PM) |
-| **Comment Timing** | Vague | Exact + time difference |
-| **Locale Support** | Limited | All locales |
-| **Accessibility** | Basic | WCAG 2.1 AA |
-| **Dark Mode** | Yes | Yes |
-| **Privacy** | Data collected | 100% private |
-| **Historical Posts** | Loses precision | Always accurate |
+| **Comment Timing**      | Vague               | Exact + time difference     |
+| **Locale Support**      | Limited             | All locales                 |
+| **Accessibility**       | Basic               | WCAG 2.1 AA                 |
+| **Dark Mode**           | Yes                 | Yes                         |
+| **Privacy**             | Data collected      | 100% private                |
+| **Historical Posts**    | Loses precision     | Always accurate             |
 
 ---
 
 ## 🛠️ For Developers
 
 ### Tech Stack
+
 - **Manifest V3** (future-proof)
 - **Vanilla JavaScript** (no frameworks)
 - **CSS Variables** (theming)
@@ -248,6 +270,7 @@ const date = new Date(Number(timestampMs));
 - **Popup UI** (manual extraction)
 
 ### Project Structure
+
 ```
 linkedin-timestamp/
 ├── manifest.json          # Extension config
@@ -262,6 +285,7 @@ linkedin-timestamp/
 ```
 
 ### Build Process
+
 ```bash
 # Development
 npm install              # Optional (no dependencies needed)
@@ -274,6 +298,7 @@ bash build.sh           # Build extension
 ```
 
 ### Key Functions
+
 ```javascript
 // Extract timestamp from post ID
 function extractTimestampFromId(postId) {
@@ -285,12 +310,12 @@ function extractTimestampFromId(postId) {
 // Format with localization
 function formatDate(date) {
   return date.toLocaleString(navigator.language, {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
   });
 }
 ```
@@ -304,6 +329,7 @@ function formatDate(date) {
 ![Extension Popup Interface](https://i.imgur.com/QmZIgng.png)
 
 ### LinkedIn Feed (Before)
+
 ```
 John Doe • 3rd+
 Product Manager
@@ -311,6 +337,7 @@ Product Manager
 ```
 
 ### LinkedIn Feed (After)
+
 ```
 John Doe • 3rd+
 Product Manager
@@ -324,13 +351,16 @@ Product Manager
 We welcome contributions! Here's how you can help:
 
 ### Found a Bug?
+
 Open an issue with:
+
 - Browser version
 - Extension version
 - Steps to reproduce
 - Expected vs actual behavior
 
 ### Want to Add Features?
+
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
@@ -338,6 +368,7 @@ Open an issue with:
 5. Submit a pull request
 
 ### Ideas We'd Love:
+
 - [ ] Copy timestamp to clipboard
 - [ ] Export timestamps (CSV/JSON)
 - [ ] Batch URL processing
@@ -360,6 +391,7 @@ Open an issue with:
 ## 🔮 Roadmap
 
 ### Version 1.0 (Current)
+
 - ✅ Automatic timestamp replacement
 - ✅ Manual URL extractor
 - ✅ Comment thread support
@@ -368,6 +400,7 @@ Open an issue with:
 - ✅ Accessibility
 
 ### Version 1.1 (Planned)
+
 - [ ] Chrome Web Store release
 - [ ] Firefox support
 - [ ] Settings panel
@@ -375,6 +408,7 @@ Open an issue with:
 - [ ] Export functionality
 
 ### Version 2.0 (Future)
+
 - [ ] Historical post tracking
 - [ ] Analytics dashboard
 - [ ] API for developers
@@ -385,27 +419,35 @@ Open an issue with:
 ## ❓ FAQ
 
 ### **Q: Is this legal?**
+
 **A:** Absolutely! We're only decoding publicly available data from LinkedIn URLs. No hacking, scraping, or API violations.
 
 ### **Q: Will LinkedIn ban me?**
+
 **A:** No. This extension only reads data that's already in your browser. It doesn't modify LinkedIn's servers or violate their terms.
 
 ### **Q: Does it work with private posts?**
+
 **A:** Yes, for posts you can see. If you can view a post on LinkedIn, the extension can show its timestamp.
 
 ### **Q: Why isn't it on the Chrome Web Store?**
+
 **A:** Coming soon! We're finalizing privacy policies and testing.
 
 ### **Q: Can I use this for my company?**
+
 **A:** Yes, for internal use. However, GPL-3.0 requires that any modifications you make must remain open source under GPL-3.0. If you distribute modified versions (even internally in some cases), you must share the source code. Cannot be integrated into proprietary closed-source products.
 
 ### **Q: Does it slow down LinkedIn?**
+
 **A:** No. The extension is lightweight and only processes visible posts.
 
 ### **Q: What about comment timestamps?**
+
 **A:** Fully supported! Shows exact time + difference from original post.
 
 ### **Q: Can I change the date format?**
+
 **A:** Currently uses your browser's locale. Custom formats coming in v1.1!
 
 ---
@@ -413,15 +455,18 @@ Open an issue with:
 ## 🙏 Credits
 
 ### Inspiration
+
 This project was inspired by similar timestamp extractors for Twitter and Instagram, applying the snowflake ID decoding technique to LinkedIn.
 
 ### Built With
+
 - Love for transparency ❤️
 - Frustration with vague timestamps 😤
 - JavaScript bitwise operators 🔢
 - Too much coffee ☕
 
 ### Special Thanks
+
 - Everyone tired of "posted recently"
 - Journalists who need exact times
 - Researchers analyzing social patterns
@@ -436,6 +481,7 @@ This project was inspired by similar timestamp extractors for Twitter and Instag
 This project is licensed under the GNU General Public License v3.0 - a strong copyleft license that ensures the software remains free and open source.
 
 **Key Points:**
+
 - ✅ Free to use, modify, and distribute
 - ✅ Source code must remain open
 - ✅ Modifications must also be GPL-3.0
@@ -471,6 +517,6 @@ It helps others discover this tool and motivates us to keep improving it.
 
 **Stop guessing when LinkedIn posts were made. Know for certain.**
 
-*Install now and never wonder "when exactly?" again.*
+_Install now and never wonder "when exactly?" again._
 
 </div>
