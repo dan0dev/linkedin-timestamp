@@ -14,7 +14,7 @@ _Because "3 days ago" doesn't cut it when you need the facts._
 
 [Installation](#-quick-start) • [Features](#-features) • [How It Works](#-how-it-works) • [Use Cases](#-use-cases)
 
-[![LinkedIn Post Date Extractor Demo](https://i.imgur.com/cSjqmXF.gif)](https://i.imgur.com/cSjqmXF.mp4)
+![LinkedIn Post Date Extractor Demo](https://i.imgur.com/YLVodaA.gif)
 
 </div>
 
