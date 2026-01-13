@@ -14,6 +14,8 @@ Transform LinkedIn's vague "2h ago" into precise timestamps like **"01/13/2026, 
 
 [Installation](#-quick-start) • [Features](#-features) • [How It Works](#-how-it-works) • [Use Cases](#-use-cases)
 
+![LinkedIn Post Date Extractor Demo](https://i.imgur.com/pmbHKlc.jpeg)
+
 </div>
 
 ---
