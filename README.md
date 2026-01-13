@@ -6,9 +6,9 @@
 
 Transform LinkedIn's vague "2h ago" into precise timestamps like **"01/13/2026, 1:29:45 PM"**
 
-[![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-blue?style=for-the-badge&logo=google-chrome)](https://github.com)
+[![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-blue?style=for-the-badge&logo=google-chrome)](https://github.com/dan0dev/linkedin-timestamp)
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-green?style=for-the-badge)](https://developer.chrome.com/docs/extensions/mv3/)
-[![Privacy First](https://img.shields.io/badge/Privacy-First-orange?style=for-the-badge&logo=shield)](https://github.com)
+[![Privacy First](https://img.shields.io/badge/Privacy-First-orange?style=for-the-badge&logo=shield)](https://github.com/dan0dev/linkedin-timestamp)
 
 *Because "3 days ago" doesn't cut it when you need the facts.*
 
@@ -63,7 +63,7 @@ Post: 01/13/2026, 8:00:00 AM (5 hours ago)
 
 1. **Download** this repository or clone it:
    ```bash
-   git clone https://github.com/yourusername/linkedin-timestamp.git
+   git clone https://github.com/dan0dev/linkedin-timestamp.git
    ```
 
 2. **Build** the extension:
@@ -474,9 +474,9 @@ It helps others discover this tool and motivates us to keep improving it.
 
 ## 📞 Contact & Support
 
-- **Issues:** [GitHub Issues](https://github.com/yourusername/linkedin-timestamp/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/yourusername/linkedin-timestamp/discussions)
-- **Email:** [your-email@example.com](mailto:your-email@example.com)
+- **Issues:** [GitHub Issues](https://github.com/dan0dev/linkedin-timestamp/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/dan0dev/linkedin-timestamp/discussions)
+- **Email:** [hi@danielkakuk.com](mailto:hi@danielkakuk.com)
 
 ---
 
