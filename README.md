@@ -397,7 +397,7 @@ Open an issue with:
 **A:** Coming soon! We're finalizing privacy policies and testing.
 
 ### **Q: Can I use this for my company?**
-**A:** Yes! It's open source. Review the code, fork it, customize it.
+**A:** Yes, for internal use. However, GPL-3.0 requires that any modifications you make must remain open source under GPL-3.0. If you distribute modified versions (even internally in some cases), you must share the source code. Cannot be integrated into proprietary closed-source products.
 
 ### **Q: Does it slow down LinkedIn?**
 **A:** No. The extension is lightweight and only processes visible posts.
