@@ -20,6 +20,25 @@ _Because "3 days ago" doesn't cut it when you need the facts._
 
 ---
 
+> [!CAUTION]
+>
+> ## ⚠️ IMPORTANT NOTICE
+>
+> **Using this extension may violate LinkedIn's Terms of Service.**
+>
+> This extension modifies LinkedIn's user interface by replacing timestamps, which may breach [LinkedIn's User Agreement (Section 8.2)](https://www.linkedin.com/legal/user-agreement) that prohibits "overlaying or modifying the Services' appearance."
+>
+> **Potential risks include:**
+>
+> - Account suspension or termination
+> - Extension removal from Chrome Web Store if reported
+>
+> **What's safe:** The popup-only URL analyzer (paste URL → get timestamp) does NOT modify LinkedIn's UI and is fully compliant.
+>
+> **Use at your own risk.** The developers are not responsible for any consequences resulting from the use of this extension.
+
+---
+
 ## 🤔 The Problem
 
 LinkedIn shows you:
