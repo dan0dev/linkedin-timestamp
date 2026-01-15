@@ -3,7 +3,6 @@
   "name": "LinkedIn Post Date Extractor",
   "version": "1.0.0",
   "description": "Extract exact timestamp from LinkedIn posts and comments, replacing relative times with precise dates",
-  "permissions": ["activeTab"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {

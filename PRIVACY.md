@@ -28,13 +28,16 @@ LinkedIn Post Date Extractor is a browser extension that extracts and displays p
 
 ## Permissions Explained
 
-The extension requires the following permission:
+This extension uses **content scripts** that run only on LinkedIn domains:
 
-### `activeTab`
-- **Purpose:** Allows the extension to read the content of LinkedIn pages you actively visit
+### Host Permission: `*://*.linkedin.com/*`
+
+- **Purpose:** Allows the extension's content script to run on LinkedIn pages
 - **Usage:** Only used to identify post IDs in the page DOM and replace relative timestamps with exact dates
-- **Scope:** Limited to pages you explicitly navigate to on linkedin.com
+- **Scope:** Limited to linkedin.com domains only — no other websites are accessed
 - **Data Processing:** All processing happens locally in your browser; no data leaves your device
+
+**Note:** This extension requests no special browser permissions (like storage, tabs, or cookies). It only uses a content script that activates on LinkedIn pages.
 
 ## Data Processing
 
@@ -66,6 +69,7 @@ If you have questions about this privacy policy or the extension's data handling
 ## Compliance
 
 This extension complies with:
+
 - Chrome Web Store Developer Program Policies
 - GDPR (General Data Protection Regulation)
 - CCPA (California Consumer Privacy Act)
