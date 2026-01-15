@@ -46,7 +46,7 @@ LinkedIn shows you:
 
 This extension uses a safe **Popup Analyzer** to reveal **exact timestamps** from LinkedIn post IDs.
 
-> **Safe & Compliant:** This extension operates strictly as a passive analyzer. It does **not** inject code, modify the DOM, or alter your LinkedIn feed in any way, ensuring full compliance with LinkedIn's Terms of Service.
+> **Note:** This tool previously supported automatic in-feed timestamp replacement (as shown in the demo). This feature has been **disabled for safety reasons** to ensure 100% compliance with LinkedIn's Terms of Service. The extension now operates exclusively as a safe URL Analyzer.
 
 ### Before → After
 
