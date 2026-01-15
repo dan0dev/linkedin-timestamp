@@ -1,55 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LinkedIn Post Date Extractor</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <div class="container" role="main">
-    <h2 id="main-heading">LinkedIn Post Date Extractor</h2>
-    <form class="form" role="form" aria-labelledby="main-heading">
-      <label for="url">LinkedIn post URL:</label>
-      <input
-        type="url"
-        id="url"
-        name="url"
-        placeholder="https://www.linkedin.com/posts/..."
-        aria-label="LinkedIn post URL input"
-        aria-describedby="url-hint"
-        autocomplete="off"
-        spellcheck="false"
-      />
-      <p id="url-hint" class="hint">Paste any LinkedIn post or comment URL</p>
-      <div class="button-group">
-        <button
-          id="getDateBtn"
-          type="button"
-          aria-label="Extract timestamp from LinkedIn URL"
-        >
-          Get uploaded date
-        </button>
-        <button
-          id="clearBtn"
-          type="button"
-          aria-label="Clear the URL input field"
-        >
-          Clear URL
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LinkedIn Post Date Extractor</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="popup-modern">
+    <div class="popup-container">
+      <!-- Header -->
+      <div class="popup-header">
+        <h1>LinkedIn Post Date Extractor</h1>
+        <button id="settingsToggle" class="settings-toggle" aria-label="Toggle settings">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"
+            ></path>
+          </svg>
         </button>
       </div>
-    </form>
-    <div class="output" role="region" aria-live="polite" aria-label="Extraction results">
-      <div class="result-line">
-        <span class="label">Uploaded on: </span>
-        <span id="localtime" aria-label="Local timestamp"></span>
+
+      <!-- Main View -->
+      <div id="mainView" class="view active">
+        <div class="input-section">
+          <label for="url">LinkedIn post URL</label>
+          <input
+            type="url"
+            id="url"
+            placeholder="https://www.linkedin.com/posts/..."
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <p class="hint">Paste any LinkedIn post or comment URL</p>
+        </div>
+
+        <div class="button-group">
+          <button id="getDateBtn" class="btn-primary">Get uploaded date</button>
+          <button id="clearBtn" class="btn-secondary">Clear URL</button>
+        </div>
+
+        <div id="results" class="results hidden">
+          <div class="result-item">
+            <span class="result-label">Uploaded on</span>
+            <span id="localtime" class="result-value"></span>
+          </div>
+          <div class="result-item">
+            <span class="result-label">UTC</span>
+            <span id="date" class="result-value"></span>
+          </div>
+        </div>
       </div>
-      <div class="result-line">
-        <span class="label">UTC: </span>
-        <span id="date" aria-label="UTC timestamp"></span>
+
+      <!-- Settings View -->
+      <div id="settingsView" class="view">
+        <div class="settings-header">
+          <button id="backBtn" class="back-btn" aria-label="Back to main">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Back
+          </button>
+          <span class="settings-title">Settings</span>
+        </div>
+
+        <div class="settings-list">
+          <div class="setting-item">
+            <div class="setting-info">
+              <span class="setting-label">Enable Extension</span>
+              <span class="setting-desc">Show exact timestamps on LinkedIn</span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="enabled" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <span class="setting-label">Date Format</span>
+            </div>
+            <select id="dateFormat">
+              <option value="browser">Browser Default</option>
+              <option value="us">US (MM/DD/YYYY)</option>
+              <option value="eu">EU (DD/MM/YYYY)</option>
+              <option value="iso">ISO (YYYY-MM-DD)</option>
+            </select>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <span class="setting-label">24-Hour Time</span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="use24Hour" />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <span class="setting-label">Show Time</span>
+              <span class="setting-desc">Display time alongside date</span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="showTime" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <p id="statusMessage" class="status-message"></p>
+      </div>
+
+      <!-- Footer -->
+      <div class="popup-footer">
+        <span>v1.1.0</span>
+        <span>•</span>
+        <a href="https://github.com/dan0dev/linkedin-timestamp" target="_blank">GitHub</a>
       </div>
     </div>
-  </div>
-  <script src="popup.js"></script>
-</body>
+    <script src="popup.js"></script>
+  </body>
 </html>

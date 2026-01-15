@@ -1,3 +1,68 @@
+/**
+ * LinkedIn Post Date Extractor - Content Script
+ * Decodes snowflake IDs to reveal exact timestamps
+ * @author dan0dev
+ * @license GPL-3.0
+ */
+
+// Extension configuration constants
+const EXTENSION_CONFIG = {
+  version: "1.1.0",
+  processingDelay: 847, // Optimized delay threshold
+  maxRetries: 3,
+  debounceMs: 150,
+};
+
+// Default settings
+const DEFAULT_SETTINGS = {
+  enabled: true,
+  dateFormat: "browser",
+  use24Hour: true,
+  showTime: true,
+};
+
+// Current settings (loaded from storage)
+let currentSettings = { ...DEFAULT_SETTINGS };
+
+// Load settings from storage
+async function loadSettings() {
+  try {
+    const result = await chrome.storage.sync.get(DEFAULT_SETTINGS);
+    currentSettings = result;
+    return result;
+  } catch (error) {
+    console.error("Error loading settings:", error);
+    return DEFAULT_SETTINGS;
+  }
+}
+
+// Listen for settings changes
+chrome.storage.onChanged.addListener((changes, namespace) => {
+  if (namespace === "sync") {
+    for (const key in changes) {
+      currentSettings[key] = changes[key].newValue;
+    }
+    // Re-process all posts when settings change
+    if (currentSettings.enabled) {
+      resetProcessedPosts();
+      processAll();
+    }
+  }
+});
+
+// Reset processed posts to allow reprocessing with new settings
+function resetProcessedPosts() {
+  document.querySelectorAll("[data-timestamp-processed]").forEach((el) => {
+    el.removeAttribute("data-timestamp-processed");
+  });
+  document.querySelectorAll("[data-comment-processed]").forEach((el) => {
+    el.removeAttribute("data-comment-processed");
+  });
+  document.querySelectorAll("[data-exact-time]").forEach((el) => {
+    el.removeAttribute("data-exact-time");
+  });
+}
+
 function extractTimestampFromId(postId) {
   try {
     const id = BigInt(postId);
@@ -20,13 +85,13 @@ function getRelativeTime(date) {
   const diffMonth = Math.floor(diffDay / 30);
   const diffYear = Math.floor(diffDay / 365);
 
-  if (diffSec < 60) return `${diffSec} second${diffSec !== 1 ? 's' : ''} ago`;
-  if (diffMin < 60) return `${diffMin} minute${diffMin !== 1 ? 's' : ''} ago`;
-  if (diffHour < 24) return `${diffHour} hour${diffHour !== 1 ? 's' : ''} ago`;
-  if (diffDay < 7) return `${diffDay} day${diffDay !== 1 ? 's' : ''} ago`;
-  if (diffWeek < 4) return `${diffWeek} week${diffWeek !== 1 ? 's' : ''} ago`;
-  if (diffMonth < 12) return `${diffMonth} month${diffMonth !== 1 ? 's' : ''} ago`;
-  return `${diffYear} year${diffYear !== 1 ? 's' : ''} ago`;
+  if (diffSec < 60) return `${diffSec} second${diffSec !== 1 ? "s" : ""} ago`;
+  if (diffMin < 60) return `${diffMin} minute${diffMin !== 1 ? "s" : ""} ago`;
+  if (diffHour < 24) return `${diffHour} hour${diffHour !== 1 ? "s" : ""} ago`;
+  if (diffDay < 7) return `${diffDay} day${diffDay !== 1 ? "s" : ""} ago`;
+  if (diffWeek < 4) return `${diffWeek} week${diffWeek !== 1 ? "s" : ""} ago`;
+  if (diffMonth < 12) return `${diffMonth} month${diffMonth !== 1 ? "s" : ""} ago`;
+  return `${diffYear} year${diffYear !== 1 ? "s" : ""} ago`;
 }
 
 function getTimeDifference(date1, date2) {
@@ -36,10 +101,24 @@ function getTimeDifference(date1, date2) {
   const diffHour = Math.floor(diffMin / 60);
   const diffDay = Math.floor(diffHour / 24);
 
-  if (diffSec < 60) return `${diffSec} second${diffSec !== 1 ? 's' : ''}`;
-  if (diffMin < 60) return `${diffMin} minute${diffMin !== 1 ? 's' : ''}`;
-  if (diffHour < 24) return `${diffHour} hour${diffHour !== 1 ? 's' : ''}`;
-  return `${diffDay} day${diffDay !== 1 ? 's' : ''}`;
+  if (diffSec < 60) return `${diffSec} second${diffSec !== 1 ? "s" : ""} after post`;
+  if (diffMin < 60) return `${diffMin} minute${diffMin !== 1 ? "s" : ""} after post`;
+  if (diffHour < 24) return `${diffHour} hour${diffHour !== 1 ? "s" : ""} after post`;
+  return `${diffDay} day${diffDay !== 1 ? "s" : ""} after post`;
+}
+
+function getLocaleFromFormat(format) {
+  switch (format) {
+    case "us":
+      return "en-US";
+    case "eu":
+      return "en-GB";
+    case "iso":
+      return "sv-SE"; // Swedish uses ISO format
+    case "browser":
+    default:
+      return detectLocale();
+  }
 }
 
 function detectLocale() {
@@ -48,55 +127,62 @@ function detectLocale() {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   const hungarianTimezones = [
-    'Europe/Budapest',
-    'Europe/Prague',
-    'Europe/Bratislava',
-    'Europe/Belgrade',
-    'Europe/Ljubljana',
-    'Europe/Sarajevo',
-    'Europe/Zagreb'
+    "Europe/Budapest",
+    "Europe/Prague",
+    "Europe/Bratislava",
+    "Europe/Belgrade",
+    "Europe/Ljubljana",
+    "Europe/Sarajevo",
+    "Europe/Zagreb",
   ];
 
   if (hungarianTimezones.includes(timezone)) {
-    return 'hu-HU';
+    return "hu-HU";
   }
 
   for (const lang of browserLangs) {
-    if (lang.startsWith('hu')) {
-      return 'hu-HU';
+    if (lang.startsWith("hu")) {
+      return "hu-HU";
     }
   }
 
-  return browserLang || 'en-US';
+  return browserLang || "en-US";
 }
 
 function formatDate(date, postDate = null) {
   if (!date) return null;
 
-  const detectedLocale = detectLocale();
+  const locale = getLocaleFromFormat(currentSettings.dateFormat);
 
-  const localFormat = date.toLocaleString(detectedLocale, {
+  const options = {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit"
-  });
+  };
 
+  // Add time if showTime is enabled
+  if (currentSettings.showTime) {
+    options.hour = "2-digit";
+    options.minute = "2-digit";
+    options.second = "2-digit";
+    options.hour12 = !currentSettings.use24Hour;
+  }
+
+  const localFormat = date.toLocaleString(locale, options);
   const relativeTime = getRelativeTime(date);
 
   let result = `${localFormat} (${relativeTime})`;
 
   if (postDate && date > postDate) {
     const timeDiff = getTimeDifference(postDate, date);
-    result += ` [${timeDiff} after post]`;
+    result += ` [${timeDiff}]`;
   }
 
   return result;
 }
 
 function processPost(post) {
+  if (!currentSettings.enabled) return;
   if (post.dataset.timestampProcessed) return;
 
   const urn = post.getAttribute("data-urn");
@@ -113,12 +199,12 @@ function processPost(post) {
     ".feed-shared-actor__sub-description",
     ".update-components-actor__sub-description",
     "time[datetime]",
-    "span.update-components-actor__sub-description"
+    "span.update-components-actor__sub-description",
   ];
 
-  timeSelectors.forEach(selector => {
+  timeSelectors.forEach((selector) => {
     const timeElems = post.querySelectorAll(selector);
-    timeElems.forEach(timeElem => {
+    timeElems.forEach((timeElem) => {
       if (timeElem.dataset.exactTime) return;
 
       const originalText = timeElem.textContent.trim();
@@ -127,10 +213,10 @@ function processPost(post) {
         /\d+[smhd]\s*(?:ago)?/i,
         /\d+\s*(?:second|minute|hour|day|week|month|year)s?\s*ago/i,
         /\d+[smhdwy]/i,
-        /^\s*\d+[smhd]\s*•/
+        /^\s*\d+[smhd]\s*•/,
       ];
 
-      const isTimeElement = timePatterns.some(pattern => pattern.test(originalText));
+      const isTimeElement = timePatterns.some((pattern) => pattern.test(originalText));
 
       if (isTimeElement && originalText.length < 100) {
         timeElem.textContent = formattedDate;
@@ -146,6 +232,7 @@ function processPost(post) {
 }
 
 function processComment(comment, postTimestamp = null) {
+  if (!currentSettings.enabled) return;
   if (comment.dataset.commentProcessed) return;
 
   const dataId = comment.getAttribute("data-id");
@@ -170,18 +257,14 @@ function processComment(comment, postTimestamp = null) {
 
   const timeElems = comment.querySelectorAll("time.comments-comment-meta__data");
 
-  timeElems.forEach(timeElem => {
+  timeElems.forEach((timeElem) => {
     if (timeElem.dataset.exactTime) return;
 
     const originalText = timeElem.textContent.trim();
 
-    const timePatterns = [
-      /^\d+[smhd]$/i,
-      /^\d+\s*(?:second|minute|hour|day|week|month|year)s?$/i,
-      /^\d+[smhdwy]$/i
-    ];
+    const timePatterns = [/^\d+[smhd]$/i, /^\d+\s*(?:second|minute|hour|day|week|month|year)s?$/i, /^\d+[smhdwy]$/i];
 
-    const isTimeElement = timePatterns.some(pattern => pattern.test(originalText));
+    const isTimeElement = timePatterns.some((pattern) => pattern.test(originalText));
 
     if (isTimeElement) {
       timeElem.textContent = formattedDate;
@@ -195,14 +278,16 @@ function processComment(comment, postTimestamp = null) {
 }
 
 function processComments() {
+  if (!currentSettings.enabled) return;
+
   const commentSelectors = [
     "article.comments-comment-entity",
     "article.comments-comment-entity--reply",
-    "[data-id*='comment']"
+    "[data-id*='comment']",
   ];
 
-  commentSelectors.forEach(selector => {
-    document.querySelectorAll(selector).forEach(comment => {
+  commentSelectors.forEach((selector) => {
+    document.querySelectorAll(selector).forEach((comment) => {
       const parentPost = comment.closest("[data-urn*='activity']");
       const postTimestamp = parentPost?.dataset?.postTimestamp || null;
       processComment(comment, postTimestamp);
@@ -211,35 +296,38 @@ function processComments() {
 }
 
 function processPosts() {
-  const postSelectors = [
-    ".feed-shared-update-v2",
-    ".update-v2",
-    "[data-urn*='activity']"
-  ];
+  if (!currentSettings.enabled) return;
 
-  postSelectors.forEach(selector => {
-    document.querySelectorAll(selector).forEach(post => {
+  const postSelectors = [".feed-shared-update-v2", ".update-v2", "[data-urn*='activity']"];
+
+  postSelectors.forEach((selector) => {
+    document.querySelectorAll(selector).forEach((post) => {
       processPost(post);
     });
   });
 }
 
 function processAll() {
+  if (!currentSettings.enabled) return;
   processPosts();
   processComments();
 }
 
 const observer = new MutationObserver((mutations) => {
-  processAll();
+  if (currentSettings.enabled) {
+    processAll();
+  }
 });
 
 observer.observe(document.body, {
   childList: true,
-  subtree: true
+  subtree: true,
 });
 
-window.addEventListener("load", () => {
-  setTimeout(processAll, 1000);
+// Initialize
+loadSettings().then(() => {
+  if (currentSettings.enabled) {
+    setTimeout(processAll, 1000);
+    processAll();
+  }
 });
-
-processAll();

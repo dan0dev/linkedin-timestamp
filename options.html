@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LinkedIn Post Date Extractor - Settings</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="options-page">
+    <div class="options-container" role="main">
+      <h1 id="main-heading">LinkedIn Post Date Extractor</h1>
+      <p class="subtitle">Settings</p>
+
+      <div class="settings-section">
+        <div class="setting-row">
+          <div class="setting-info">
+            <label for="enabled">Enable Extension</label>
+            <span class="setting-hint">(Page will reload)</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="enabled" checked />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-info">
+            <label for="dateFormat">Date Format</label>
+          </div>
+          <select id="dateFormat" aria-label="Select date format">
+            <option value="browser">Browser Default</option>
+            <option value="us">US (MM/DD/YYYY)</option>
+            <option value="eu">European (DD/MM/YYYY)</option>
+            <option value="iso">ISO 8601 (YYYY-MM-DD)</option>
+          </select>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-info">
+            <label for="use24Hour">24-Hour Time</label>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="use24Hour" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-info">
+            <label for="showTime">Show Time</label>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="showTime" checked />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="settings-footer">
+        <p class="about-text">This extension shows the exact date and time of all LinkedIn posts and comments.</p>
+        <p class="status-message" id="statusMessage" aria-live="polite"></p>
+      </div>
+    </div>
+    <script src="options.js"></script>
+  </body>
+</html>

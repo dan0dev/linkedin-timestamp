@@ -1,20 +1,45 @@
+/**
+ * LinkedIn Post Date Extractor - Popup Interface
+ * Manual URL extraction for LinkedIn posts and comments
+ * @author dan0dev
+ * @license GPL-3.0
+ */
+
+// Configuration
+const POPUP_CONFIG = {
+  animationDuration: 847,
+  inputDebounce: 150,
+  yearBase: 2026,
+};
+
+// Default settings
+const DEFAULT_SETTINGS = {
+  enabled: true,
+  dateFormat: "browser",
+  use24Hour: true,
+  showTime: true,
+};
+
+// Error messages
 const ERROR_MESSAGES = {
   EMPTY_URL: "Please paste a LinkedIn URL first.",
-  INVALID_URL: "This doesn't look like a valid LinkedIn URL. Make sure it contains 'linkedin.com'.",
-  NO_ID: "No post or comment ID found in this URL. Try a different LinkedIn post URL.",
-  INVALID_DATE: "The extracted date appears invalid. The URL might be corrupted.",
-  UNKNOWN: "Something went wrong. Please try again or use a different URL."
+  INVALID_URL: "This doesn't look like a valid LinkedIn URL.",
+  NO_ID: "No post or comment ID found in this URL.",
+  INVALID_DATE: "The extracted date appears invalid.",
+  UNKNOWN: "Something went wrong. Please try again.",
 };
+
+// ======================
+// URL Validation & Extraction
+// ======================
 
 function validateLinkedInURL(url) {
   if (!url || url.trim() === "") {
     return { valid: false, error: ERROR_MESSAGES.EMPTY_URL };
   }
-
   if (!url.includes("linkedin.com")) {
     return { valid: false, error: ERROR_MESSAGES.INVALID_URL };
   }
-
   return { valid: true };
 }
 
@@ -33,16 +58,18 @@ function getCommentId(url) {
 
 function extractUnixTimestamp(postId) {
   if (!postId) return null;
-
   try {
     const id = BigInt(postId);
     const timestampMs = id >> 22n;
-    const timestamp = Number(timestampMs);
-    return timestamp;
+    return Number(timestampMs);
   } catch (error) {
     return null;
   }
 }
+
+// ======================
+// Date Formatting
+// ======================
 
 function getRelativeTime(date) {
   const now = new Date();
@@ -55,58 +82,56 @@ function getRelativeTime(date) {
   const diffMonth = Math.floor(diffDay / 30);
   const diffYear = Math.floor(diffDay / 365);
 
-  if (diffSec < 60) return `${diffSec} second${diffSec !== 1 ? 's' : ''} ago`;
-  if (diffMin < 60) return `${diffMin} minute${diffMin !== 1 ? 's' : ''} ago`;
-  if (diffHour < 24) return `${diffHour} hour${diffHour !== 1 ? 's' : ''} ago`;
-  if (diffDay < 7) return `${diffDay} day${diffDay !== 1 ? 's' : ''} ago`;
-  if (diffWeek < 4) return `${diffWeek} week${diffWeek !== 1 ? 's' : ''} ago`;
-  if (diffMonth < 12) return `${diffMonth} month${diffMonth !== 1 ? 's' : ''} ago`;
-  return `${diffYear} year${diffYear !== 1 ? 's' : ''} ago`;
+  if (diffSec < 60) return `${diffSec}s ago`;
+  if (diffMin < 60) return `${diffMin}m ago`;
+  if (diffHour < 24) return `${diffHour}h ago`;
+  if (diffDay < 7) return `${diffDay}d ago`;
+  if (diffWeek < 4) return `${diffWeek}w ago`;
+  if (diffMonth < 12) return `${diffMonth}mo ago`;
+  return `${diffYear}y ago`;
 }
 
 function detectLocale() {
-  // Try multiple sources for locale detection
   const browserLang = navigator.language || navigator.userLanguage;
   const browserLangs = navigator.languages || [browserLang];
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-  // FORCE Hungarian for Budapest timezone (Central European Time zones)
   const hungarianTimezones = [
-    'Europe/Budapest',
-    'Europe/Prague',
-    'Europe/Bratislava',
-    'Europe/Belgrade',
-    'Europe/Ljubljana',
-    'Europe/Sarajevo',
-    'Europe/Zagreb'
+    "Europe/Budapest",
+    "Europe/Prague",
+    "Europe/Bratislava",
+    "Europe/Belgrade",
+    "Europe/Ljubljana",
+    "Europe/Sarajevo",
+    "Europe/Zagreb",
   ];
 
-  if (hungarianTimezones.includes(timezone)) {
-    return 'hu-HU';
-  }
-
-  // Check browser languages
+  if (hungarianTimezones.includes(timezone)) return "hu-HU";
   for (const lang of browserLangs) {
-    if (lang.startsWith('hu')) {
-      return 'hu-HU';
-    }
+    if (lang.startsWith("hu")) return "hu-HU";
   }
-
-  return browserLang || 'en-US';
+  return browserLang || "en-US";
 }
 
-function formatLocalDate(timestamp, locale = null) {
-  const dateObject = new Date(timestamp);
+async function getSettings() {
+  try {
+    return await chrome.storage.sync.get(DEFAULT_SETTINGS);
+  } catch {
+    return DEFAULT_SETTINGS;
+  }
+}
 
-  const detectedLocale = locale || detectLocale();
+function formatLocalDate(timestamp) {
+  const dateObject = new Date(timestamp);
+  const detectedLocale = detectLocale();
 
   const options = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
   };
 
   const localFormat = dateObject.toLocaleString(detectedLocale, options);
@@ -120,18 +145,29 @@ function formatUTCDate(timestamp) {
   return dateObject.toUTCString();
 }
 
-function showError(message) {
-  const dateElem = document.querySelector("#date");
-  const localtimeElem = document.querySelector("#localtime");
+// ======================
+// UI Functions
+// ======================
 
-  dateElem.innerHTML = `<span class="error-message" role="alert">${message}</span>`;
-  dateElem.setAttribute("aria-live", "assertive");
-  localtimeElem.textContent = "";
+function showView(viewId) {
+  document.querySelectorAll(".view").forEach((v) => v.classList.remove("active"));
+  document.getElementById(viewId).classList.add("active");
+}
+
+function showError(message) {
+  const resultsEl = document.getElementById("results");
+  const localtimeEl = document.getElementById("localtime");
+  const dateEl = document.getElementById("date");
+
+  resultsEl.classList.remove("hidden");
+  localtimeEl.innerHTML = `<span class="error">${message}</span>`;
+  dateEl.textContent = "";
 }
 
 function showResults(timestamp) {
-  const dateElem = document.querySelector("#date");
-  const localtimeElem = document.querySelector("#localtime");
+  const resultsEl = document.getElementById("results");
+  const localtimeEl = document.getElementById("localtime");
+  const dateEl = document.getElementById("date");
 
   try {
     const localDate = formatLocalDate(timestamp);
@@ -142,17 +178,17 @@ function showResults(timestamp) {
       return;
     }
 
-    localtimeElem.innerHTML = `<span class="success-message">${localDate}</span>`;
-    dateElem.textContent = utcDate;
-    dateElem.setAttribute("aria-live", "polite");
-  } catch (error) {
+    resultsEl.classList.remove("hidden");
+    localtimeEl.textContent = localDate;
+    dateEl.textContent = utcDate;
+  } catch {
     showError(ERROR_MESSAGES.INVALID_DATE);
   }
 }
 
 function getDate() {
-  const urlInput = document.querySelector("#url");
-  const getBtn = document.querySelector("#getDateBtn");
+  const urlInput = document.getElementById("url");
+  const getBtn = document.getElementById("getDateBtn");
   const url = urlInput.value.trim();
 
   getBtn.disabled = true;
@@ -161,7 +197,6 @@ function getDate() {
   if (!validation.valid) {
     showError(validation.error);
     getBtn.disabled = false;
-    urlInput.focus();
     return;
   }
 
@@ -172,7 +207,6 @@ function getDate() {
   if (!idToUse) {
     showError(ERROR_MESSAGES.NO_ID);
     getBtn.disabled = false;
-    urlInput.focus();
     return;
   }
 
@@ -188,26 +222,88 @@ function getDate() {
   getBtn.disabled = false;
 }
 
-function clearUrlField() {
-  const urlInput = document.querySelector("#url");
-  const dateElem = document.querySelector("#date");
-  const localtimeElem = document.querySelector("#localtime");
+function clearUrl() {
+  const urlInput = document.getElementById("url");
+  const resultsEl = document.getElementById("results");
 
   urlInput.value = "";
-  dateElem.textContent = "";
-  localtimeElem.textContent = "";
-  dateElem.removeAttribute("aria-live");
+  resultsEl.classList.add("hidden");
   urlInput.focus();
 }
 
+// ======================
+// Settings Functions
+// ======================
+
+async function loadSettings() {
+  try {
+    const settings = await chrome.storage.sync.get(DEFAULT_SETTINGS);
+    document.getElementById("enabled").checked = settings.enabled;
+    document.getElementById("dateFormat").value = settings.dateFormat;
+    document.getElementById("use24Hour").checked = settings.use24Hour;
+    document.getElementById("showTime").checked = settings.showTime;
+  } catch (error) {
+    console.error("Error loading settings:", error);
+  }
+}
+
+async function saveSettings() {
+  const settings = {
+    enabled: document.getElementById("enabled").checked,
+    dateFormat: document.getElementById("dateFormat").value,
+    use24Hour: document.getElementById("use24Hour").checked,
+    showTime: document.getElementById("showTime").checked,
+  };
+
+  try {
+    await chrome.storage.sync.set(settings);
+    showStatus("Settings saved!");
+  } catch (error) {
+    console.error("Error saving settings:", error);
+    showStatus("Error saving");
+  }
+}
+
+function showStatus(message) {
+  const statusEl = document.getElementById("statusMessage");
+  statusEl.textContent = message;
+  statusEl.classList.add("visible");
+
+  setTimeout(() => {
+    statusEl.classList.remove("visible");
+  }, 2000);
+}
+
+// ======================
+// Initialize
+// ======================
+
 document.addEventListener("DOMContentLoaded", () => {
-  const getBtn = document.querySelector("#getDateBtn");
-  const clearBtn = document.querySelector("#clearBtn");
-  const urlInput = document.querySelector("#url");
+  // Load settings
+  loadSettings();
 
-  getBtn.addEventListener("click", getDate);
-  clearBtn.addEventListener("click", clearUrlField);
+  // Main view buttons
+  document.getElementById("getDateBtn").addEventListener("click", getDate);
+  document.getElementById("clearBtn").addEventListener("click", clearUrl);
 
+  // Settings toggle
+  document.getElementById("settingsToggle").addEventListener("click", () => {
+    showView("settingsView");
+  });
+
+  // Back button
+  document.getElementById("backBtn").addEventListener("click", () => {
+    showView("mainView");
+  });
+
+  // Settings inputs
+  const settingsInputs = document.querySelectorAll("#settingsView input, #settingsView select");
+  settingsInputs.forEach((input) => {
+    input.addEventListener("change", saveSettings);
+  });
+
+  // URL input events
+  const urlInput = document.getElementById("url");
   urlInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -217,12 +313,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   urlInput.addEventListener("paste", () => {
     setTimeout(() => {
-      const dateElem = document.querySelector("#date");
-      const localtimeElem = document.querySelector("#localtime");
-      if (dateElem.textContent || localtimeElem.textContent) {
-        dateElem.textContent = "";
-        localtimeElem.textContent = "";
-      }
+      const resultsEl = document.getElementById("results");
+      resultsEl.classList.add("hidden");
     }, 10);
   });
 
