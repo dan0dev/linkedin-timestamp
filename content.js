@@ -20,13 +20,13 @@ function getRelativeTime(date) {
   const diffMonth = Math.floor(diffDay / 30);
   const diffYear = Math.floor(diffDay / 365);
 
-  if (diffSec < 60) return `${diffSec} second${diffSec !== 1 ? 's' : ''} ago`;
-  if (diffMin < 60) return `${diffMin} minute${diffMin !== 1 ? 's' : ''} ago`;
-  if (diffHour < 24) return `${diffHour} hour${diffHour !== 1 ? 's' : ''} ago`;
-  if (diffDay < 7) return `${diffDay} day${diffDay !== 1 ? 's' : ''} ago`;
-  if (diffWeek < 4) return `${diffWeek} week${diffWeek !== 1 ? 's' : ''} ago`;
-  if (diffMonth < 12) return `${diffMonth} month${diffMonth !== 1 ? 's' : ''} ago`;
-  return `${diffYear} year${diffYear !== 1 ? 's' : ''} ago`;
+  if (diffSec < 60) return `${diffSec} second${diffSec !== 1 ? "s" : ""} ago`;
+  if (diffMin < 60) return `${diffMin} minute${diffMin !== 1 ? "s" : ""} ago`;
+  if (diffHour < 24) return `${diffHour} hour${diffHour !== 1 ? "s" : ""} ago`;
+  if (diffDay < 7) return `${diffDay} day${diffDay !== 1 ? "s" : ""} ago`;
+  if (diffWeek < 4) return `${diffWeek} week${diffWeek !== 1 ? "s" : ""} ago`;
+  if (diffMonth < 12) return `${diffMonth} month${diffMonth !== 1 ? "s" : ""} ago`;
+  return `${diffYear} year${diffYear !== 1 ? "s" : ""} ago`;
 }
 
 function getTimeDifference(date1, date2) {
@@ -36,10 +36,10 @@ function getTimeDifference(date1, date2) {
   const diffHour = Math.floor(diffMin / 60);
   const diffDay = Math.floor(diffHour / 24);
 
-  if (diffSec < 60) return `${diffSec} second${diffSec !== 1 ? 's' : ''}`;
-  if (diffMin < 60) return `${diffMin} minute${diffMin !== 1 ? 's' : ''}`;
-  if (diffHour < 24) return `${diffHour} hour${diffHour !== 1 ? 's' : ''}`;
-  return `${diffDay} day${diffDay !== 1 ? 's' : ''}`;
+  if (diffSec < 60) return `${diffSec} second${diffSec !== 1 ? "s" : ""}`;
+  if (diffMin < 60) return `${diffMin} minute${diffMin !== 1 ? "s" : ""}`;
+  if (diffHour < 24) return `${diffHour} hour${diffHour !== 1 ? "s" : ""}`;
+  return `${diffDay} day${diffDay !== 1 ? "s" : ""}`;
 }
 
 function detectLocale() {
@@ -48,26 +48,26 @@ function detectLocale() {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   const hungarianTimezones = [
-    'Europe/Budapest',
-    'Europe/Prague',
-    'Europe/Bratislava',
-    'Europe/Belgrade',
-    'Europe/Ljubljana',
-    'Europe/Sarajevo',
-    'Europe/Zagreb'
+    "Europe/Budapest",
+    "Europe/Prague",
+    "Europe/Bratislava",
+    "Europe/Belgrade",
+    "Europe/Ljubljana",
+    "Europe/Sarajevo",
+    "Europe/Zagreb",
   ];
 
   if (hungarianTimezones.includes(timezone)) {
-    return 'hu-HU';
+    return "hu-HU";
   }
 
   for (const lang of browserLangs) {
-    if (lang.startsWith('hu')) {
-      return 'hu-HU';
+    if (lang.startsWith("hu")) {
+      return "hu-HU";
     }
   }
 
-  return browserLang || 'en-US';
+  return browserLang || "en-US";
 }
 
 function formatDate(date, postDate = null) {
@@ -81,7 +81,7 @@ function formatDate(date, postDate = null) {
     day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
-    second: "2-digit"
+    second: "2-digit",
   });
 
   const relativeTime = getRelativeTime(date);
@@ -113,12 +113,12 @@ function processPost(post) {
     ".feed-shared-actor__sub-description",
     ".update-components-actor__sub-description",
     "time[datetime]",
-    "span.update-components-actor__sub-description"
+    "span.update-components-actor__sub-description",
   ];
 
-  timeSelectors.forEach(selector => {
+  timeSelectors.forEach((selector) => {
     const timeElems = post.querySelectorAll(selector);
-    timeElems.forEach(timeElem => {
+    timeElems.forEach((timeElem) => {
       if (timeElem.dataset.exactTime) return;
 
       const originalText = timeElem.textContent.trim();
@@ -127,10 +127,10 @@ function processPost(post) {
         /\d+[smhd]\s*(?:ago)?/i,
         /\d+\s*(?:second|minute|hour|day|week|month|year)s?\s*ago/i,
         /\d+[smhdwy]/i,
-        /^\s*\d+[smhd]\s*•/
+        /^\s*\d+[smhd]\s*•/,
       ];
 
-      const isTimeElement = timePatterns.some(pattern => pattern.test(originalText));
+      const isTimeElement = timePatterns.some((pattern) => pattern.test(originalText));
 
       if (isTimeElement && originalText.length < 100) {
         timeElem.textContent = formattedDate;
@@ -170,18 +170,14 @@ function processComment(comment, postTimestamp = null) {
 
   const timeElems = comment.querySelectorAll("time.comments-comment-meta__data");
 
-  timeElems.forEach(timeElem => {
+  timeElems.forEach((timeElem) => {
     if (timeElem.dataset.exactTime) return;
 
     const originalText = timeElem.textContent.trim();
 
-    const timePatterns = [
-      /^\d+[smhd]$/i,
-      /^\d+\s*(?:second|minute|hour|day|week|month|year)s?$/i,
-      /^\d+[smhdwy]$/i
-    ];
+    const timePatterns = [/^\d+[smhd]$/i, /^\d+\s*(?:second|minute|hour|day|week|month|year)s?$/i, /^\d+[smhdwy]$/i];
 
-    const isTimeElement = timePatterns.some(pattern => pattern.test(originalText));
+    const isTimeElement = timePatterns.some((pattern) => pattern.test(originalText));
 
     if (isTimeElement) {
       timeElem.textContent = formattedDate;
@@ -198,11 +194,11 @@ function processComments() {
   const commentSelectors = [
     "article.comments-comment-entity",
     "article.comments-comment-entity--reply",
-    "[data-id*='comment']"
+    "[data-id*='comment']",
   ];
 
-  commentSelectors.forEach(selector => {
-    document.querySelectorAll(selector).forEach(comment => {
+  commentSelectors.forEach((selector) => {
+    document.querySelectorAll(selector).forEach((comment) => {
       const parentPost = comment.closest("[data-urn*='activity']");
       const postTimestamp = parentPost?.dataset?.postTimestamp || null;
       processComment(comment, postTimestamp);
@@ -211,14 +207,10 @@ function processComments() {
 }
 
 function processPosts() {
-  const postSelectors = [
-    ".feed-shared-update-v2",
-    ".update-v2",
-    "[data-urn*='activity']"
-  ];
+  const postSelectors = [".feed-shared-update-v2", ".update-v2", "[data-urn*='activity']"];
 
-  postSelectors.forEach(selector => {
-    document.querySelectorAll(selector).forEach(post => {
+  postSelectors.forEach((selector) => {
+    document.querySelectorAll(selector).forEach((post) => {
       processPost(post);
     });
   });
@@ -228,6 +220,11 @@ function processAll() {
   processPosts();
   processComments();
 }
+
+/*
+// Compliance Mode: Automatic DOM modification DISABLED to comply with LinkedIn ToS
+// The following logic previously automated timestamp replacement in the feed.
+// It is preserved here for reference but inactive.
 
 const observer = new MutationObserver((mutations) => {
   processAll();
@@ -243,3 +240,4 @@ window.addEventListener("load", () => {
 });
 
 processAll();
+*/

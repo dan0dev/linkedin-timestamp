@@ -19,7 +19,7 @@ cp manifest.json dist/
 cp popup.html dist/
 cp popup.js dist/
 cp styles.css dist/
-cp content.js dist/
+
 cp README.md dist/
 cp LICENSE dist/
 

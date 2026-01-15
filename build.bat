@@ -19,7 +19,7 @@ copy manifest.json dist\ >nul
 copy popup.html dist\ >nul
 copy popup.js dist\ >nul
 copy styles.css dist\ >nul
-copy content.js dist\ >nul
+
 copy README.md dist\ >nul
 copy LICENSE dist\ >nul
 

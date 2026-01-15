@@ -61,7 +61,9 @@ LinkedIn shows you:
 
 ## ✨ The Solution
 
-This extension automatically decodes LinkedIn's post IDs to reveal **exact timestamps** hidden in plain sight.
+This extension uses a safe **Popup Analyzer** to reveal **exact timestamps** from LinkedIn post IDs.
+
+> **Compliance Note:** The automatic in-feed timestamp replacement feature acts as a "DOM modification" and has been disabled to ensure strict adherence to LinkedIn's User Agreement. You can now safely check timestamps by pasting the URL into the extension's popup.
 
 ### Before → After
 
